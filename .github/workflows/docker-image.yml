@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag sritherock/basic-auth-inator:latest
+    - name: Push the Docker image
+      run: docker login -u sritherock -p ${{ secrets.DOCKER_TOKEN }} && docker push sritherock/basic-auth-inator:latest
